@@ -59,6 +59,13 @@
             .cart-details.active {
                 display: block;
             }
+            .checkout-form {
+                display: none;
+                margin-top: 20px;
+            }
+            .checkout-form.active {
+                display: block;
+            }
             .product-box {
                 border: 1px solid #ccc;
                 padding: 20px;
@@ -118,7 +125,7 @@
                     <ul>
                         <li v-for="item in cart" :key="item.id">{{item.title}} - {{item.price}} x {{item.quantity}}</li>
                     </ul>
-                    <button v-if="cart.length > 0" @click="checkout">Checkout</button>
+                    <button v-if="cart.length > 0" @click="showCheckout">Checkout</button>
                 </div>
             </div>
 
@@ -136,6 +143,23 @@
                     <button @click="addToCart(product)">Add to Cart</button>
                 </div>
             </main>
+
+            <!-- Checkout Form -->
+            <div class="checkout-form" v-bind:class="{active: checkoutOpen}">
+                <h2>Checkout</h2>
+                <p>
+                    <strong>First Name:</strong>
+                    <input v-model="order.firstName" />
+                </p>
+                <p>
+                    <strong>Last Name:</strong>
+                    <input v-model="order.lastName" />
+                </p>
+                <h2>Order Information</h2>
+                <p>First Name: {{order.firstName}}</p>
+                <p>Last Name: {{order.lastName}}</p>
+                <button @click="submitOrder">Submit Order</button>
+            </div>
         </div>
 
         <script type="text/javascript">
@@ -191,9 +215,14 @@
                         }
                     ],
                     cart: [],
+                    order: {
+                        firstName: '',
+                        lastName: ''
+                    },
                     sortBy: 'subject',
                     sortOrder: 'asc',
-                    cartOpen: false
+                    cartOpen: false,
+                    checkoutOpen: false
                 },
                 methods: {
                     addToCart(product) {
@@ -214,9 +243,13 @@
                     toggleCart() {
                         this.cartOpen = !this.cartOpen;
                     },
-                    checkout() {
-                        alert("Proceed to checkout with the following items:\n" + 
-                              this.cart.map(item => `${item.title} - ${item.quantity} pcs`).join("\n"));
+                    showCheckout() {
+                        this.checkoutOpen = true;
+                        this.cartOpen = false;
+                    },
+                    submitOrder() {
+                        alert(`Order Submitted!\nFirst Name: ${this.order.firstName}\nLast Name: ${this.order.lastName}`);
+                        this.checkoutOpen = false;
                     },
                     toggleSortOrder() {
                         this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
