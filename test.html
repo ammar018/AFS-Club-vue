@@ -175,17 +175,10 @@
             </p>
             <p>
                 <strong>State:</strong>
-                <select v-model="order.state">
+                <select v-model="order.state" class="form-control">
                     <option disabled value="">Select State</option>
-                    <option>AL</option>
-                    <option>AR</option>
-                    <option>CA</option>
-                    <option>NV</option>
+                    <option v-for="(state, key) in states" v-bind:value="state">{{key}}</option>
                 </select>
-            </p>
-            <p>
-                <strong>Zip/Postal Code:</strong>
-                <input v-model="order.zip" />
             </p>
             <p>
                 <input type="radio" id="home" value="Home" v-model="order.method">
@@ -194,7 +187,7 @@
                 <label for="business">Business</label>
             </p>
             <p>
-                <input type="checkbox" id="gift" v-model="order.gift">
+                <input type="checkbox" id="gift" value="true" v-model="order.gift" v-bind:true-value="order.sendGift" v-bind:false-value="order.dontSendGift">
                 <label for="gift">Ship as Gift?</label>
             </p>
 
@@ -208,7 +201,7 @@
             <p>Shipping Method: {{order.method}}</p>
             <p>Gift: {{order.gift ? 'Yes' : 'No'}}</p>
 
-            <button @click="submitOrder">Submit Order</button>
+            <button v-on:click="submitForm">Place Order</button>
         </div>
     </div>
 
@@ -237,30 +230,28 @@
                     state: '',
                     zip: '',
                     method: '',
-                    gift: false
-                }
-            },
-            computed: {
-                sortedProducts: function () {
-                    let sorted = this.products.slice();
-                    sorted.sort((a, b) => {
-                        let modifier = this.sortOrder === 'asc' ? 1 : -1;
-                        if (this.sortBy === 'price') {
-                            return (a.price - b.price) * modifier;
-                        } else if (this.sortBy === 'availability') {
-                            return (a.availability - b.availability) * modifier;
-                        } else {
-                            return a[this.sortBy].localeCompare(b[this.sortBy]) * modifier;
-                        }
-                    });
-                    return sorted;
+                    gift: false,
+                    sendGift: 'Send as a gift',
+                    dontSendGift: 'Do not send as a gift'
+                },
+                states: {
+                    AL: 'Alabama',
+                    AK: 'Alaska',
+                    AZ: 'Arizona',
+                    AR: 'Arkansas',
+                    CA: 'California',
+                    CO: 'Colorado',
+                    CT: 'Connecticut',
+                    DE: 'Delaware'
                 }
             },
             methods: {
                 addToCart: function (product) {
-                    let cartItem = this.cart.find(item => item.id === product.id);
-                    if (cartItem) {
-                        cartItem.quantity++;
+                    var found = this.cart.find(function (item) {
+                        return item.id === product.id;
+                    });
+                    if (found) {
+                        found.quantity++;
                     } else {
                         this.cart.push({ id: product.id, title: product.title, price: product.price, quantity: 1 });
                     }
@@ -271,10 +262,20 @@
                 toggleSortOrder: function () {
                     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
                 },
-                submitOrder: function () {
-                    // Here you could handle the final submission logic
-                    alert('Order Submitted');
-                    this.showCheckoutForm = false;
+                submitForm: function () {
+                    console.log("Order Submitted!", this.order);
+                    alert("Order Submitted!");
+                }
+            },
+            computed: {
+                sortedProducts: function () {
+                    var sorted = this.products.sort((a, b) => {
+                        var modifier = this.sortOrder === 'asc' ? 1 : -1;
+                        if (a[this.sortBy] < b[this.sortBy]) return -1 * modifier;
+                        if (a[this.sortBy] > b[this.sortBy]) return 1 * modifier;
+                        return 0;
+                    });
+                    return sorted;
                 }
             }
         });
