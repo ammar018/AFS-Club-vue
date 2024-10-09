@@ -8,6 +8,17 @@
              <div id="app">
                 <header>
                     <h1 v-text="sitename"></h1>
+                    <h2>Checkout</h2>
+                    <p>
+                    <strong>First Name:</strong>
+                    <input v-model="order.firstName"/>
+                </p>
+                <p>
+                <strong>Last Name:</strong>
+                </p>
+                <h2>Order Information</h2>
+                <p>First Name: {{order.firstName}}</p>
+                <p>Last Name: {{order.lastName}}</p>   
                 </header>
                 <main>
                     <figure>
