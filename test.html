@@ -1,275 +1,283 @@
-<html>
-    <head>
-        <title>Vue.js AFS Club</title>
-        <!-- Font Awesome CDN -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            header {
-                width: 100%;
-                text-align: center;
-                padding: 20px;
-            }
-            h1 {
-                margin: 0;
-            }
-            main {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .sort-by {
-                position: absolute;
-                top: 20px;
-                left: 20px;
-            }
-            .shopping-cart {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                display: flex;
-                align-items: center;
-            }
-            .shopping-cart-icon {
-                font-size: 24px;
-                cursor: pointer;
-                margin-right: 10px;
-            }
-            .cart-details {
-                display: none;
-                position: absolute;
-                top: 40px;
-                right: 0;
-                background-color: #f8f9fa;
-                padding: 10px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                width: 200px;
-                z-index: 1;
-            }
-            .cart-details.active {
-                display: block;
-            }
-            .checkout-form {
-                display: none;
-                margin-top: 20px;
-            }
-            .checkout-form.active {
-                display: block;
-            }
-            .product-box {
-                border: 1px solid #ccc;
-                padding: 20px;
-                margin: 10px;
-                width: 250px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                text-align: center;
-            }
-            img {
-                width: 100%;
-                height: auto;
-            }
-            button {
-                background-color: #28a745;
-                color: white;
-                border: none;
-                padding: 10px;
-                cursor: pointer;
-            }
-            button:hover {
-                background-color: #218838;
-            }
-            ul {
-                list-style-type: none;
-                padding: 0;
-            }
-            .sort-button {
-                cursor: pointer;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="app">
-            <header>
-                <h1 v-text="sitename"></h1>
-            </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js AFS Club</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin: 0;
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .sort-by {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .shopping-cart {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .shopping-cart-icon {
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .cart-details {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            z-index: 1;
+        }
+        .cart-details.active {
+            display: block;
+        }
+        .product-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            width: 250px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        img {
+            width: 100%;
+            height: auto;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sort-button {
+            cursor: pointer;
+        }
+        .checkout-form {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            width: 300px;
+        }
+        input {
+            display: block;
+            width: 100%;
+            padding: 5px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1 v-text="sitename"></h1>
+        </header>
 
-            <!-- Sort By Section -->
-            <div class="sort-by">
-                <label for="sort-by">Sort By:</label>
-                <select v-model="sortBy" id="sort-by">
-                    <option value="subject">Subject</option>
-                    <option value="location">Location</option>
-                    <option value="price">Price</option>
-                    <option value="availability">Availability</option>
-                </select>
-                <button class="sort-button" @click="toggleSortOrder">
-                    <i :class="sortOrder === 'asc' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
-                </button>
-            </div>
+        <!-- Sort By Section -->
+        <div class="sort-by">
+            <label for="sort-by">Sort By:</label>
+            <select v-model="sortBy" id="sort-by">
+                <option value="subject">Subject</option>
+                <option value="location">Location</option>
+                <option value="price">Price</option>
+                <option value="availability">Availability</option>
+            </select>
+            <button class="sort-button" @click="toggleSortOrder">
+                <i :class="sortOrder === 'asc' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+            </button>
+        </div>
 
-            <!-- Shopping Cart Section -->
-            <div class="shopping-cart">
-                <i class="fas fa-shopping-cart shopping-cart-icon" @click="toggleCart"></i> ({{cart.length}})
-                <div class="cart-details" v-bind:class="{active: cartOpen}">
-                    <h2>Cart</h2>
-                    <ul>
-                        <li v-for="item in cart" :key="item.id">{{item.title}} - {{item.price}} x {{item.quantity}}</li>
-                    </ul>
-                    <button v-if="cart.length > 0" @click="showCheckout">Checkout</button>
-                </div>
-            </div>
-
-            <!-- Display Products -->
-            <main>
-                <div class="product-box" v-for="product in sortedProducts" :key="product.id">
-                    <figure>
-                        <img v-bind:src="product.image" alt="Product Image">
-                    </figure>
-                    <h2 v-text="product.title"></h2>
-                    <p v-html="product.subject"></p>
-                    <p>Location: {{product.location}}</p>
-                    <p>Price: {{product.price}}</p>
-                    <p>Availability: {{product.availability}}</p>
-                    <button @click="addToCart(product)">Add to Cart</button>
-                </div>
-            </main>
-
-            <!-- Checkout Form -->
-            <div class="checkout-form" v-bind:class="{active: checkoutOpen}">
-                <h2>Checkout</h2>
-                <p>
-                    <strong>First Name:</strong>
-                    <input v-model="order.firstName" />
-                </p>
-                <p>
-                    <strong>Last Name:</strong>
-                    <input v-model="order.lastName" />
-                </p>
-                <h2>Order Information</h2>
-                <p>First Name: {{order.firstName}}</p>
-                <p>Last Name: {{order.lastName}}</p>
-                <button @click="submitOrder">Submit Order</button>
+        <!-- Shopping Cart Section -->
+        <div class="shopping-cart">
+            <i class="fas fa-shopping-cart shopping-cart-icon" @click="toggleCart"></i> ({{cart.length}})
+            <div class="cart-details" v-bind:class="{active: cartOpen}">
+                <h2>Cart</h2>
+                <ul>
+                    <li v-for="item in cart" :key="item.id">{{item.title}} - {{item.price}} x {{item.quantity}}</li>
+                </ul>
+                <button v-if="cart.length > 0" @click="showCheckoutForm = true">Proceed to Checkout</button>
             </div>
         </div>
 
-        <script type="text/javascript">
-            var webstore = new Vue({
-                el: '#app',
-                data: {
-                    sitename: "Vue.js AFS Club",
-                    products: [
-                        {
-                            id: 1001,
-                            title: "Math Club",
-                            subject: "Math",
-                            location: "123 Math Lane",
-                            price: 100,
-                            availability: 5,
-                            image: "images/math-fullsize.png"
-                        },
-                        {
-                            id: 1002,
-                            title: "English Club",
-                            subject: "English",
-                            location: "456 English Ave",
-                            price: 500,
-                            availability: 5,
-                            image: "images/english-fullsize.png"
-                        },
-                        {
-                            id: 1003,
-                            title: "Arabic Club",
-                            subject: "Arabic",
-                            location: "789 Arabic Street",
-                            price: 500,
-                            availability: 5,
-                            image: "images/arabic-fullsize.png"
-                        },
-                        {
-                            id: 1004,
-                            title: "Physics Club",
-                            subject: "Physics",
-                            location: "101 Physics Blvd",
-                            price: 500,
-                            availability: 5,
-                            image: "images/physics-fullsize.png"
-                        },
-                        {
-                            id: 1005,
-                            title: "Chemistry Club",
-                            subject: "Chemistry",
-                            location: "202 Chemistry Road",
-                            price: 500,
-                            availability: 5,
-                            image: "images/chemistry-fullsize.png"
-                        }
-                    ],
-                    cart: [],
-                    order: {
-                        firstName: '',
-                        lastName: ''
-                    },
-                    sortBy: 'subject',
-                    sortOrder: 'asc',
-                    cartOpen: false,
-                    checkoutOpen: false
-                },
-                methods: {
-                    addToCart(product) {
-                        let itemInCart = this.cart.find(item => item.id === product.id);
-                        if (itemInCart) {
-                            if (itemInCart.quantity < product.availability) {
-                                itemInCart.quantity++;
-                            } else {
-                                alert("No more availability for this product");
-                            }
-                        } else {
-                            this.cart.push({
-                                ...product,
-                                quantity: 1
-                            });
-                        }
-                    },
-                    toggleCart() {
-                        this.cartOpen = !this.cartOpen;
-                    },
-                    showCheckout() {
-                        this.checkoutOpen = true;
-                        this.cartOpen = false;
-                    },
-                    submitOrder() {
-                        alert(`Order Submitted!\nFirst Name: ${this.order.firstName}\nLast Name: ${this.order.lastName}`);
-                        this.checkoutOpen = false;
-                    },
-                    toggleSortOrder() {
-                        this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-                    }
-                },
-                computed: {
-                    sortedProducts() {
-                        return this.products.sort((a, b) => {
-                            let modifier = this.sortOrder === 'asc' ? 1 : -1;
-                            if (this.sortBy === 'price' || this.sortBy === 'availability') {
-                                return (a[this.sortBy] - b[this.sortBy]) * modifier;
-                            } else {
-                                if (a[this.sortBy] < b[this.sortBy]) return -1 * modifier;
-                                if (a[this.sortBy] > b[this.sortBy]) return 1 * modifier;
-                                return 0;
-                            }
-                        });
-                    }
+        <!-- Display Products -->
+        <main>
+            <div class="product-box" v-for="product in sortedProducts" :key="product.id">
+                <figure>
+                    <img v-bind:src="product.image" alt="Product Image">
+                </figure>
+                <h2 v-text="product.title"></h2>
+                <p v-html="product.subject"></p>
+                <p>Location: {{product.location}}</p>
+                <p>Price: {{product.price}}</p>
+                <p>Availability: {{product.availability}}</p>
+                <button @click="addToCart(product)">Add to Cart</button>
+            </div>
+        </main>
+
+        <!-- Checkout Form -->
+        <div class="checkout-form" v-if="showCheckoutForm">
+            <h2>Checkout</h2>
+            <p>
+                <strong>First Name:</strong>
+                <input v-model="order.firstName" />
+            </p>
+            <p>
+                <strong>Last Name:</strong>
+                <input v-model="order.lastName" />
+            </p>
+            <p>
+                <strong>Address:</strong>
+                <input v-model="order.address" />
+            </p>
+            <p>
+                <strong>City:</strong>
+                <input v-model="order.city" />
+            </p>
+            <p>
+                <strong>State:</strong>
+                <select v-model="order.state">
+                    <option disabled value="">Select State</option>
+                    <option>AL</option>
+                    <option>AR</option>
+                    <option>CA</option>
+                    <option>NV</option>
+                </select>
+            </p>
+            <p>
+                <strong>Zip/Postal Code:</strong>
+                <input v-model="order.zip" />
+            </p>
+            <p>
+                <input type="radio" id="home" value="Home" v-model="order.method">
+                <label for="home">Home</label>
+                <input type="radio" id="business" value="Business" v-model="order.method">
+                <label for="business">Business</label>
+            </p>
+            <p>
+                <input type="checkbox" id="gift" v-model="order.gift">
+                <label for="gift">Ship as Gift?</label>
+            </p>
+
+            <h2>Order Information</h2>
+            <p>First Name: {{order.firstName}}</p>
+            <p>Last Name: {{order.lastName}}</p>
+            <p>Address: {{order.address}}</p>
+            <p>City: {{order.city}}</p>
+            <p>State: {{order.state}}</p>
+            <p>Zip: {{order.zip}}</p>
+            <p>Shipping Method: {{order.method}}</p>
+            <p>Gift: {{order.gift ? 'Yes' : 'No'}}</p>
+
+            <button @click="submitOrder">Submit Order</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var webstore = new Vue({
+            el: '#app',
+            data: {
+                sitename: "Vue.js AFS Club",
+                products: [
+                    { id: 1001, title: "Math Club", subject: "Math", location: "123 Math Lane", price: 100, availability: 5, image: "images/math-fullsize.png" },
+                    { id: 1002, title: "English Club", subject: "English", location: "456 English Ave", price: 500, availability: 5, image: "images/english-fullsize.png" },
+                    { id: 1003, title: "Arabic Club", subject: "Arabic", location: "789 Arabic Street", price: 500, availability: 5, image: "images/arabic-fullsize.png" },
+                    { id: 1004, title: "Physics Club", subject: "Physics", location: "101 Physics Blvd", price: 500, availability: 5, image: "images/physics-fullsize.png" },
+                    { id: 1005, title: "Chemistry Club", subject: "Chemistry", location: "202 Chemistry Road", price: 500, availability: 5, image: "images/chemistry-fullsize.png" }
+                ],
+                cart: [],
+                sortBy: 'subject',
+                sortOrder: 'asc',
+                cartOpen: false,
+                showCheckoutForm: false,
+                order: {
+                    firstName: '',
+                    lastName: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    method: '',
+                    gift: false
                 }
-            });
-        </script>
-    </body>
+            },
+            computed: {
+                sortedProducts: function () {
+                    let sorted = this.products.slice();
+                    sorted.sort((a, b) => {
+                        let modifier = this.sortOrder === 'asc' ? 1 : -1;
+                        if (this.sortBy === 'price') {
+                            return (a.price - b.price) * modifier;
+                        } else if (this.sortBy === 'availability') {
+                            return (a.availability - b.availability) * modifier;
+                        } else {
+                            return a[this.sortBy].localeCompare(b[this.sortBy]) * modifier;
+                        }
+                    });
+                    return sorted;
+                }
+            },
+            methods: {
+                addToCart: function (product) {
+                    let cartItem = this.cart.find(item => item.id === product.id);
+                    if (cartItem) {
+                        cartItem.quantity++;
+                    } else {
+                        this.cart.push({ id: product.id, title: product.title, price: product.price, quantity: 1 });
+                    }
+                },
+                toggleCart: function () {
+                    this.cartOpen = !this.cartOpen;
+                },
+                toggleSortOrder: function () {
+                    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+                },
+                submitOrder: function () {
+                    // Here you could handle the final submission logic
+                    alert('Order Submitted');
+                    this.showCheckoutForm = false;
+                }
+            }
+        });
+    </script>
+</body>
 </html>
